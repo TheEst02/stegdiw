@@ -6,8 +6,8 @@ const data = JSON.parse(fs.readFileSync("data/releases.json", "utf8"));
 const feed = new RSS({
   title: "FDA – This Week’s Releases",
   description: "Custom RSS feed generated from FDA release schedule",
-  feed_url:
-    "https://raw.githubusercontent.com/TheEst02/stegdiw/main/upcoming-releases/rss.xml",
+feed_url:
+  "https://raw.githubusercontent.com/TheEst02/stegdiw/main/upcoming-releases/rss.xml",
   site_url:
     "https://filmdistributorsassociation.com/release-schedule/this-weeks-releases/",
   language: "en"
