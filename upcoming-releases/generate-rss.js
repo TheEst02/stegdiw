@@ -24,3 +24,5 @@ data.forEach(item => {
 
 fs.writeFileSync("rss.xml", feed.xml({ indent: true }));
 console.log("Generated rss.xml");
+
+
