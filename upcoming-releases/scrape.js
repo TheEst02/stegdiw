@@ -10,7 +10,6 @@ async function scrapeFDA() {
   const dom = new JSDOM(html);
   const doc = dom.window.document;
 
-  // FDA uses a table for releases
   const rows = [...doc.querySelectorAll("table tr")];
 
   const items = rows
@@ -20,19 +19,13 @@ async function scrapeFDA() {
         .querySelector("td:nth-child(2)")
         ?.textContent?.trim();
       const date = row.querySelector("td:nth-child(3)")?.textContent?.trim();
-
-      // FDA does not provide per-film links, so fallback to main page
       const link = URL;
 
       return { title, distributor, date, link };
     })
     .filter(item => item.title && item.title.length > 0);
 
-  // Ensure data folder exists
-  if (!fs.existsSync("data")) {
-    fs.mkdirSync("data");
-  }
-
+  if (!fs.existsSync("data")) fs.mkdirSync("data");
   fs.writeFileSync("data/releases.json", JSON.stringify(items, null, 2));
   console.log(`Saved ${items.length} items to data/releases.json`);
 }
