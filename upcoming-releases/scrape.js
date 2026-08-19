@@ -10,29 +10,33 @@ async function scrapeFDA() {
   const dom = new JSDOM(html);
   const doc = dom.window.document;
 
-  // FDA uses inconsistent markup — this catches all common patterns
-  const blocks = [
-    ...doc.querySelectorAll(".release-item"),
-    ...doc.querySelectorAll(".release"),
-    ...doc.querySelectorAll("article")
-  ];
+  // FDA uses a table for releases
+  const rows = [...doc.querySelectorAll("table tr")];
 
-  const items = blocks
-    .map(el => {
-      const title =
-        el.querySelector("h3, .film-title")?.textContent?.trim() ?? null;
-      const distributor =
-        el.querySelector(".distributor")?.textContent?.trim() ?? null;
-      const date =
-        el.querySelector(".release-date")?.textContent?.trim() ?? null;
-      const link = el.querySelector("a")?.href ?? URL;
+  const items = rows
+    .map(row => {
+      const title = row.querySelector("td:nth-child(1)")?.textContent?.trim();
+      const distributor = row
+        .querySelector("td:nth-child(2)")
+        ?.textContent?.trim();
+      const date = row.querySelector("td:nth-child(3)")?.textContent?.trim();
+
+      // FDA does not provide per-film links, so fallback to main page
+      const link = URL;
 
       return { title, distributor, date, link };
     })
-    .filter(i => i.title);
+    .filter(item => item.title && item.title.length > 0);
+
+  // Ensure data folder exists
+  if (!fs.existsSync("data")) {
+    fs.mkdirSync("data");
+  }
 
   fs.writeFileSync("data/releases.json", JSON.stringify(items, null, 2));
-  console.log(`Saved ${items.length} items`);
+  console.log(`Saved ${items.length} items to data/releases.json`);
 }
 
-scrapeFDA();
+scrapeFDA().catch(err => {
+  console.error("Scrape failed:", err);
+});
