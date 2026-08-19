@@ -7,7 +7,7 @@ const feed = new RSS({
   title: "FDA – This Week’s Releases",
   description: "Custom RSS feed generated from FDA release schedule",
   feed_url:
-    "https://raw.githubusercontent.com/TheEst02/stegdiw/fda-this-week-feed/main/rss.xml",
+    "https://raw.githubusercontent.com/TheEst02/stegdiw/main/fda-this-week-feed/main/rss.xml",
   site_url:
     "https://filmdistributorsassociation.com/release-schedule/this-weeks-releases/",
   language: "en"
