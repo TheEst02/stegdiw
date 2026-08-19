@@ -1,0 +1,27 @@
+name: Update Upcoming Releases Feed
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - run: cd upcoming-releases && npm install
+      - run: cd upcoming-releases && npm run scrape
+      - run: cd upcoming-releases && npm run rss
+
+      - run: |
+          git config user.name "GitHub Action"
+          git config user.email "actions@github.com"
+          git add upcoming-releases/data/releases.json upcoming-releases/rss.xml
+          git commit -m "Update upcoming releases feed" || echo "No changes"
+          git push
