@@ -1,0 +1,14 @@
+{
+  "name": "fda-this-week-feed",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "scrape": "node scrape.js",
+    "rss": "node generate-rss.js"
+  },
+  "dependencies": {
+    "jsdom": "^24.0.0",
+    "node-fetch": "^3.3.2",
+    "rss": "^1.2.2"
+  }
+}
